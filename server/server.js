@@ -1,17 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv').config();
 const app = express();
 const {ObjectID} = require('mongodb');
 const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
 
+const port = process.env.PORT || 3000;
+
 app.use(bodyParser.json());
 
 app.post('/todos', (req, res) => {
   let todo = new Todo({
     text: req.body.text
-  });
+});
 
   todo.save().then((doc) => {
     res.send(doc);
@@ -51,8 +54,8 @@ app.get('/todos/:id', (req, res) => {
   }).catch(e => res.status(400).send(`An error has occured`));
 });
 
-app.listen(3000, () => {
-  console.log('Server is up on port 3000!');
+app.listen(port, () => {
+  console.log(`Server is up on port ${port}`);
 });
 
 module.exports = {app};
